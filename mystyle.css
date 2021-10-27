@@ -1,0 +1,25 @@
+
+h1 {
+  color: cyan;
+  margin-left: 20px;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+
+
+
+
+div#content {
+    background-image: url(https://cdn.vox-cdn.com/thumbor/ISsSEq9zcGLNKfr3jnB7C9iIukc=/0x0:3000x2001/1200x800/filters:focal(1260x761:1740x1241)/cdn.vox-cdn.com/uploads/chorus_image/image/69962992/1344212289.0.jpg);
+    background-color: rgba(255,255,255,0.6);
+    background-blend-mode: lighten;
+      /* Full height */
+    height: 100%;
+    width: 100%;
+
+     /* Center and scale the image nicely */
+     background-position: center;
+     background-repeat: no-repeat;
+     background-size: cover;
+     
+}
