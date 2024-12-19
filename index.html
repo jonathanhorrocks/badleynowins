@@ -37,7 +37,7 @@
     display: none;
   }
 
-  #scoreboard, #info-board {
+  #scoreboard, #info-board, #facts-remaining {
     margin-top: 10px;
     font-size: 1.2em;
     color: #555;
@@ -54,17 +54,21 @@
 <body>
 <h1>Whack-a-Bradley</h1>
 <p>Bradley is terrible at fantasy football. Prove it by whacking his face!</p>
+
 <button id="start-btn">Start Game</button>
 <button id="reset-btn" style="display:none;">Reset Game</button>
+
 <div id="scoreboard">Score: <span id="score">0</span></div>
-<div id="info-board">Time Left: <span id="time-left">30</span> s</div>
+<div id="facts-remaining">Facts remaining: <span id="facts-count"></span></div>
+<div id="info-board">Time Elapsed: <span id="time-elapsed">0</span> s</div>
+
 <div id="game-container">
   <img id="bradley-face" src="bradley_face.png" alt="Bradley's Face">
 </div>
+
 <script>
 // Configuration
-const gameDuration = 30; // seconds
-const faceAppearanceInterval = 500; // every 1 second
+const faceAppearanceInterval = 500; // Move/check face every 0.5s
 const humiliationList = [
   "Week 2, 2023: Bradley lost by 45 points to Jenna's 'Touchdown Terrors'.",
   "Week 5, 2023: Bradley failed to start his RB1 and lost by 30 points to Mark's 'Hail Marys'.",
@@ -74,7 +78,7 @@ const humiliationList = [
 ];
 
 let score = 0;
-let timeLeft = gameDuration;
+let timeElapsed = 0;
 let gameInterval;
 let timerInterval;
 let currentHumiliationIndex = 0;
@@ -83,7 +87,8 @@ let currentHumiliationIndex = 0;
 const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 const scoreDisplay = document.getElementById('score');
-const timeDisplay = document.getElementById('time-left');
+const timeDisplay = document.getElementById('time-elapsed');
+const factsCountDisplay = document.getElementById('facts-count');
 const bradleyFace = document.getElementById('bradley-face');
 const gameContainer = document.getElementById('game-container');
 
@@ -98,7 +103,6 @@ bradleyFace.addEventListener('click', () => {
   showNextHumiliation();
 });
 
-// Start game function
 function startGame() {
   startBtn.style.display = 'none';
   resetBtn.style.display = 'inline-block';
@@ -106,34 +110,33 @@ function startGame() {
   // Reset variables
   score = 0;
   scoreDisplay.textContent = score;
-  timeLeft = gameDuration;
-  timeDisplay.textContent = timeLeft;
+  timeElapsed = 0;
+  timeDisplay.textContent = timeElapsed;
   currentHumiliationIndex = 0;
+  factsCountDisplay.textContent = humiliationList.length - currentHumiliationIndex;
 
-  bradleyFace.style.display = 'block';
+  bradleyFace.style.display = 'none';
+
+  // Start moving/hiding face at intervals
   gameInterval = setInterval(moveBradleyFace, faceAppearanceInterval);
 
+  // Start counting elapsed time
   timerInterval = setInterval(() => {
-    timeLeft--;
-    timeDisplay.textContent = timeLeft;
-    if (timeLeft <= 0) {
-      endGame();
-    }
+    timeElapsed++;
+    timeDisplay.textContent = timeElapsed;
   }, 1000);
 }
 
-// Move Bradley's face randomly
+// Move Bradley's face randomly and sometimes hide it
 function moveBradleyFace() {
-  // Randomly choose to show or hide the face
+  // 50% chance to hide the face
   if (Math.random() < 0.5) {
-    // 50% of the time, hide the face
     bradleyFace.style.display = 'none';
   } else {
-    // 50% of the time, show the face and move it to a random position
     bradleyFace.style.display = 'block';
-
     const containerWidth = gameContainer.clientWidth;
     const containerHeight = gameContainer.clientHeight;
+
     const faceWidth = bradleyFace.clientWidth;
     const faceHeight = bradleyFace.clientHeight;
 
@@ -148,22 +151,31 @@ function moveBradleyFace() {
   }
 }
 
-// Show humiliation in a popup (alert) and wait for user to close it
+// Show humiliation in an alert and check if it's the last one
 function showNextHumiliation() {
   if (currentHumiliationIndex < humiliationList.length) {
     alert(humiliationList[currentHumiliationIndex]);
     currentHumiliationIndex++;
+
+    // Update facts remaining
+    factsCountDisplay.textContent = humiliationList.length - currentHumiliationIndex;
+
+    // If we've now shown all facts, end the game
+    if (currentHumiliationIndex >= humiliationList.length) {
+      endGame();
+    }
   } else {
-    alert("Bradley's losing history is too long to list!");
+    // Just in case we reach here after exhausting the list
+    endGame();
   }
 }
 
-// End the game
+// End the game once all humiliations are shown
 function endGame() {
   clearInterval(gameInterval);
   clearInterval(timerInterval);
   bradleyFace.style.display = 'none';
-  alert("Game Over! You whacked Bradley " + score + " times.");
+  alert("Game Over! You whacked Bradley " + score + " times in " + timeElapsed + " seconds.");
 }
 
 // Reset game
@@ -172,12 +184,15 @@ function resetGame() {
   startBtn.style.display = 'inline-block';
   resetBtn.style.display = 'none';
   scoreDisplay.textContent = "0";
-  timeLeft = gameDuration;
-  timeDisplay.textContent = timeLeft;
+  timeElapsed = 0;
+  timeDisplay.textContent = timeElapsed;
+  currentHumiliationIndex = 0;
+  factsCountDisplay.textContent = humiliationList.length;
 }
 </script>
 </body>
 </html>
+
 
 
 
