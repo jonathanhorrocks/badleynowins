@@ -64,7 +64,7 @@
 <script>
 // Configuration
 const gameDuration = 30; // seconds
-const faceAppearanceInterval = 1000; // every 1 second
+const faceAppearanceInterval = 500; // every 1 second
 const humiliationList = [
   "Week 2, 2023: Bradley lost by 45 points to Jenna's 'Touchdown Terrors'.",
   "Week 5, 2023: Bradley failed to start his RB1 and lost by 30 points to Mark's 'Hail Marys'.",
@@ -124,20 +124,28 @@ function startGame() {
 
 // Move Bradley's face randomly
 function moveBradleyFace() {
-  const containerWidth = gameContainer.clientWidth;
-  const containerHeight = gameContainer.clientHeight;
+  // Randomly choose to show or hide the face
+  if (Math.random() < 0.5) {
+    // 50% of the time, hide the face
+    bradleyFace.style.display = 'none';
+  } else {
+    // 50% of the time, show the face and move it to a random position
+    bradleyFace.style.display = 'block';
 
-  const faceWidth = bradleyFace.clientWidth;
-  const faceHeight = bradleyFace.clientHeight;
+    const containerWidth = gameContainer.clientWidth;
+    const containerHeight = gameContainer.clientHeight;
+    const faceWidth = bradleyFace.clientWidth;
+    const faceHeight = bradleyFace.clientHeight;
 
-  const maxX = containerWidth - faceWidth;
-  const maxY = containerHeight - faceHeight;
+    const maxX = containerWidth - faceWidth;
+    const maxY = containerHeight - faceHeight;
 
-  const randomX = Math.floor(Math.random() * maxX);
-  const randomY = Math.floor(Math.random() * maxY);
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
 
-  bradleyFace.style.left = randomX + 'px';
-  bradleyFace.style.top = randomY + 'px';
+    bradleyFace.style.left = randomX + 'px';
+    bradleyFace.style.top = randomY + 'px';
+  }
 }
 
 // Show humiliation in a popup (alert) and wait for user to close it
