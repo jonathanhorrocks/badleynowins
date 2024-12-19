@@ -11,7 +11,7 @@
     text-align: center;
     padding: 20px;
     position: relative;
-    overflow: hidden; /* For ensuring face won't appear outside visible area */
+    overflow: hidden; 
   }
 
   h1 {
@@ -34,7 +34,7 @@
     cursor: pointer;
     width: 100px;
     height: auto;
-    display: none; /* will show after game starts */
+    display: none;
   }
 
   #scoreboard, #info-board {
@@ -49,13 +49,6 @@
     cursor: pointer;
     margin: 5px;
   }
-
-  #humiliation {
-    margin-top: 20px;
-    font-size: 1.1em;
-    color: #aa0000;
-    min-height: 50px;
-  }
 </style>
 </head>
 <body>
@@ -68,18 +61,16 @@
 <div id="game-container">
   <img id="bradley-face" src="bradley_face.png" alt="Bradley's Face">
 </div>
-<div id="humiliation"></div>
-
 <script>
 // Configuration
 const gameDuration = 30; // seconds
-const faceAppearanceInterval = 1000; // every 1 second move face
+const faceAppearanceInterval = 1000; // every 1 second
 const humiliationList = [
   "Week 2, 2023: Bradley lost by 45 points to Jenna's 'Touchdown Terrors'.",
   "Week 5, 2023: Bradley failed to start his RB1 and lost by 30 points to Mark's 'Hail Marys'.",
   "Playoffs 2022: Bradley benched his highest scorer and got crushed by Sarah's 'End Zone Enforcers'.",
   "Week 10, 2023: Bradley's QB got 0 points! He lost by 25 to Amanda's 'Goal Line Goliaths'.",
-  "Championship 2021: Let's not forget Bradley lost the big game by 50 points!"
+  "Championship 2021: Bradley lost the big game by 50 points!"
 ];
 
 let score = 0;
@@ -93,7 +84,6 @@ const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 const scoreDisplay = document.getElementById('score');
 const timeDisplay = document.getElementById('time-left');
-const humiliationDisplay = document.getElementById('humiliation');
 const bradleyFace = document.getElementById('bradley-face');
 const gameContainer = document.getElementById('game-container');
 
@@ -113,19 +103,16 @@ function startGame() {
   startBtn.style.display = 'none';
   resetBtn.style.display = 'inline-block';
 
-  // Reset game variables
+  // Reset variables
   score = 0;
   scoreDisplay.textContent = score;
   timeLeft = gameDuration;
   timeDisplay.textContent = timeLeft;
   currentHumiliationIndex = 0;
-  humiliationDisplay.textContent = "";
 
-  // Show face and move it at intervals
   bradleyFace.style.display = 'block';
   gameInterval = setInterval(moveBradleyFace, faceAppearanceInterval);
 
-  // Start timer countdown
   timerInterval = setInterval(() => {
     timeLeft--;
     timeDisplay.textContent = timeLeft;
@@ -135,7 +122,7 @@ function startGame() {
   }, 1000);
 }
 
-// Move Bradley's face to a random position inside the game container
+// Move Bradley's face randomly
 function moveBradleyFace() {
   const containerWidth = gameContainer.clientWidth;
   const containerHeight = gameContainer.clientHeight;
@@ -153,13 +140,13 @@ function moveBradleyFace() {
   bradleyFace.style.top = randomY + 'px';
 }
 
-// Show next humiliation
+// Show humiliation in a popup (alert) and wait for user to close it
 function showNextHumiliation() {
   if (currentHumiliationIndex < humiliationList.length) {
-    humiliationDisplay.textContent = humiliationList[currentHumiliationIndex];
+    alert(humiliationList[currentHumiliationIndex]);
     currentHumiliationIndex++;
   } else {
-    humiliationDisplay.textContent = "Bradley's history of losing is too long to list...";
+    alert("Bradley's losing history is too long to list!");
   }
 }
 
@@ -168,7 +155,7 @@ function endGame() {
   clearInterval(gameInterval);
   clearInterval(timerInterval);
   bradleyFace.style.display = 'none';
-  humiliationDisplay.textContent = "Game Over! You whacked Bradley " + score + " times.";
+  alert("Game Over! You whacked Bradley " + score + " times.");
 }
 
 // Reset game
@@ -176,8 +163,6 @@ function resetGame() {
   endGame();
   startBtn.style.display = 'inline-block';
   resetBtn.style.display = 'none';
-  humiliationDisplay.textContent = "";
-  score = 0;
   scoreDisplay.textContent = "0";
   timeLeft = gameDuration;
   timeDisplay.textContent = timeLeft;
@@ -185,5 +170,6 @@ function resetGame() {
 </script>
 </body>
 </html>
+
 
 
